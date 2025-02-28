@@ -36,7 +36,7 @@ This will result in an output file `never-gonna-give-you-up (1).mkv` saved to th
 
 Add your files, video and attachments, to the input directory of the mounted container.
 
-```shell
+```sh
 docker run -it --rm \
   -u $(id -u):$(id -g) \
   -v ${PWD}/input:/app/input \
@@ -50,7 +50,7 @@ By default, it will find all files from the `/app/input` directory (recursively)
 
 Embed attachments for files in a single subdirectory and writing output to `/app/output/hits`.
 
-```shell
+```sh
 docker run -it --rm \
   -u $(id -u):$(id -g) \
   -v ${PWD}/input:/app/input \
@@ -64,7 +64,7 @@ docker run -it --rm \
 
 Embed attachments for files in multiple input subdirectories and writing output to `/app/output` (default).
 
-```shell
+```sh
 docker run -it --rm \
   -u $(id -u):$(id -g) \
   -v ${PWD}/input:/app/input \
@@ -81,7 +81,7 @@ docker run -it --rm \
 
 Embed attachments for files in multiple input subdirectories and writing output to specific output subdirectories respectively.
 
-```shell
+```sh
 docker run -it --rm \
   -u $(id -u):$(id -g) \
   -v ${PWD}/input:/app/input \
@@ -103,7 +103,7 @@ docker run -it --rm \
 
 Embed attachments for files in multiple input subdirectories, with the `add` mode, and writing output to specific output subdirectories respectively.
 
-```shell
+```sh
 docker run -it --rm \
   -u $(id -u):$(id -g) \
   -v ${PWD}/input:/app/input \
@@ -126,7 +126,7 @@ docker run -it --rm \
 
 Embed attachments for files in multiple input subdirectories, with `add`/`replace` modes, and writing output to specific output subdirectories respectively.
 
-```shell
+```sh
 docker run -it --rm \
   -u $(id -u):$(id -g) \
   -v ${PWD}/input:/app/input \
