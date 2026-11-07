@@ -32,6 +32,24 @@ This will result in an output file `never-gonna-give-you-up (1).mkv` saved to th
     
     Use the [mkvexport](https://github.com/ToshY/mkvexport) tool to extract attachments with the above-mentioned tree structure.
 
+## Modes
+
+| Mode | Behaviour |
+|---|---|
+| `replace` (default) | Removes all existing subtitles, attachments, chapters and track tags from the input file, then adds the ones from the subdirectory. |
+| `add` | Keeps everything in the input file and adds the subtitles, attachments and chapters from the subdirectory. |
+
+## Tags
+
+!!! note
+
+    The `tags.xml` file is **not** imported.
+
+    - Track statistics tags (`BPS`, `DURATION`, `NUMBER_OF_FRAMES`, `NUMBER_OF_BYTES`, `_STATISTICS_*`) are recalculated 
+      by mkvmerge on every remux, so the output always contains correct values.
+    - Global tags of the input file (e.g. `TITLE`, `COMMENT`) are kept in both modes. They are copied as-is, so edits 
+      made in `tags.xml` are not applied.
+
 ## Basic
 
 Add your files, video and attachments, to the input directory of the mounted container.
