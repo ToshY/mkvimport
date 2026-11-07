@@ -27,8 +27,9 @@ def mkvmerge_remux_attachments(
         file_attachments_dir = Path(
             remove_suffix_from_string(file_attachments_dir.as_posix(), "_stripped")
         )
+        # note: use `.name` instead of `.stem`, as the directory has no extension and the name may contain dots
         output_file_name = (
-            file_attachments_dir.stem + new_file_suffix + input_file.suffix
+            file_attachments_dir.name + new_file_suffix + input_file.suffix
         )
 
     if not file_attachments_dir.exists():
@@ -52,12 +53,13 @@ def mkvmerge_remux_attachments(
     chapter = files_in_dir(file_attachments_dir, ["chapters.xml"])
     mkv_chapter = mkvmerge_chapter(chapter)
 
-    # note: explicitly no tags are getting merged back
+    # note: `tags.xml` is explicitly not merged back. It normally only contains track statistics tags (BPS, DURATION,
+    # NUMBER_OF_FRAMES, ...), which mkvmerge recalculates on every remux anyway.
 
     if output_path.is_dir():
         output_file = output_path.joinpath(output_file_name).as_posix()
     else:
-        output_file = output_path.with_suffix("").as_posix()
+        output_file = output_path.as_posix()
 
     mkvremux_attachments_command = (
         [
@@ -81,18 +83,21 @@ def mkvmerge_remux_attachments(
 
 def strip_file_attachments(input_file: Path) -> Path:
     """
-    This function takes an input file as a Path object and strips attachments, subtitles, tags, and chapters from it.
-    It creates a temporary file with the stripped content.
+    This function takes an input file as a Path object and strips attachments, subtitles, track tags, and chapters
+    from it. It creates a temporary file with the stripped content.
+
+    Global tags (e.g. TITLE, COMMENT) are kept. Track tags are stripped; mkvmerge writes fresh track statistics tags
+    (BPS, DURATION, NUMBER_OF_FRAMES, ...) on remux.
 
     Parameters:
-        input_file (Path): The input file from which attachments, subtitles, tags, and chapters are stripped.
+        input_file (Path): The input file from which attachments, subtitles, track tags, and chapters are stripped.
 
     Returns:
         Path: The path to the temporary file with the stripped content.
 
     Raises:
-        Exception: If there is an error while stripping the attachments, subtitles, tags, and chapters, an exception
-        is raised.
+        Exception: If there is an error while stripping the attachments, subtitles, track tags, and chapters, an
+        exception is raised.
     """
 
     temporary_file = input_file.parent.joinpath(
@@ -107,7 +112,6 @@ def strip_file_attachments(input_file: Path) -> Path:
         "--no-attachments",
         "--no-chapters",
         "--no-track-tags",
-        "--no-global-tags",
         "(",
         input_file.as_posix(),
         ")",
